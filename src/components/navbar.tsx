@@ -1,7 +1,7 @@
 "use client"
 
 import { Button, Container, Divider, Group, Loader, Text, Menu, Avatar, Box, Title } from "@mantine/core";
-import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight, IconUser, IconHeart, IconPlus, IconLogout } from '@tabler/icons-react';
+import { IconSearch, IconTrash, IconUser, IconHeart, IconPlus, IconLogout } from '@tabler/icons-react';
 
 
 import { signIn, useSession } from "next-auth/react";
