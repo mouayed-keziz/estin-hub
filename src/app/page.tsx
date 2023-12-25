@@ -11,7 +11,7 @@ export default function Page() {
       <Navbar />
       <Space h={100} />
 
-      <Container size='lg'>
+      <Container>
         <Hero />
         <Space h={100} />
         <EventsTable />
