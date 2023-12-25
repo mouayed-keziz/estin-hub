@@ -1,10 +1,10 @@
 "use client"
 
-import { Button, Container, Divider, Group, Loader, Text, Menu, Avatar, Box, Title } from "@mantine/core";
-import { IconSearch, IconTrash, IconUser, IconHeart, IconPlus, IconLogout } from '@tabler/icons-react';
+import { Button, Container, Divider, Group, Loader, Text, Menu, Avatar, Box, Title, useMantineColorScheme } from "@mantine/core";
+import { IconSearch, IconTrash, IconUser, IconHeart, IconPlus, IconLogout, IconMoonStars, IconSun } from '@tabler/icons-react';
 
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -12,7 +12,7 @@ export default function Navbar() {
 
     return (
         <>
-            <Container size='lg' py='md'>
+            <Container size='lg' py='xs'>
                 <Group position="apart">
                     <Title order={3} fw={'bold'}>ESTIN-HUB</Title>
                     {status === 'loading' && <Loading />}
@@ -35,6 +35,9 @@ function Loading() {
 }
 function UserDropDown() {
     const { data } = useSession();
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const dark = colorScheme === 'dark';
     return (
         <>
             <Menu trigger="hover" shadow="md" width={200}>
@@ -61,10 +64,12 @@ function UserDropDown() {
                     <Menu.Item component={Link} href='/search' icon={<IconSearch size={14} />}>Search</Menu.Item>
 
                     <Menu.Divider />
+                    <Menu.Item onClick={() => toggleColorScheme()} icon={dark ? <IconSun size={14} /> : <IconMoonStars size={14} />}>Toggle Theme</Menu.Item>
+                    <Menu.Divider />
 
                     <Menu.Label>Danger zone</Menu.Label>
-                    <Menu.Item icon={<IconLogout size={14} />}>Logout</Menu.Item>
-                    <Menu.Item color="red" icon={<IconTrash size={14} />}>Delete my account</Menu.Item>
+                    <Menu.Item onClick={() => signOut()} icon={<IconLogout size={14} />}>Logout</Menu.Item>
+                    <Menu.Item disabled color="red" icon={<IconTrash size={14} />}>Delete my account</Menu.Item>
                 </Menu.Dropdown>
             </Menu>
         </>
