@@ -24,3 +24,14 @@ The project involves developing a dedicated web platform for non-academic commun
 - `trpc`
 - `prisma`
 - `mantine ui`
+
+
+
+### TODO
+
+- [x] navbar
+- [ ] main page 
+- [ ] search page
+- [ ] create page
+- [ ] liked page
+- [ ] blog page
