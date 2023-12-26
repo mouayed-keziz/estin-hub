@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Image, Text, Badge, Button, Group, AspectRatio } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, AspectRatio, Stack, Box } from '@mantine/core';
 
 
 interface BlogCardProps {
@@ -12,30 +12,34 @@ interface BlogCardProps {
 
 export default function BlogCard({ title, description, image, owner_role }: BlogCardProps) {
     return (
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Card.Section>
-                <AspectRatio ratio={16 / 9} >
-                    <Image
-                        src={image}
-                        alt="Norway"
-                    />
-                </AspectRatio>
-            </Card.Section>
+        <Card sx={{ height: '100%' }} shadow="sm" padding="lg" radius="md" withBorder>
 
-            <Group position="apart" mt="md" mb="xs">
-                <Text weight={500}>{title}</Text>
-                <Badge color="pink" variant="light">
-                    {owner_role}
-                </Badge>
-            </Group>
+            <Stack justify="space-between" h='100%'>
+                <Box>
+                    <Card.Section>
+                        <AspectRatio ratio={16 / 9} >
+                            <Image
+                                src={image}
+                                alt="Norway"
+                            />
+                        </AspectRatio>
+                    </Card.Section>
 
-            <Text size="sm" color="dimmed">
-                {description}
-            </Text>
+                    <Group position="apart" mt="md" mb="xs">
+                        <Text weight={500}>{title}</Text>
+                        <Badge color="pink" variant="light">
+                            {owner_role}
+                        </Badge>
+                    </Group>
 
-            <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-                Read more
-            </Button>
+                    <Text size="sm" color="dimmed">
+                        {description}
+                    </Text>
+                </Box>
+                <Button variant="light" color="blue" fullWidth mt="md" radius="md">
+                    Read more
+                </Button>
+            </Stack>
         </Card>
     );
 }
