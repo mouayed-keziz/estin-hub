@@ -30,7 +30,7 @@ The project involves developing a dedicated web platform for non-academic commun
 ### TODO
 
 - [x] navbar
-- [ ] main page 
+- [x] main page 
 - [ ] search page
 - [ ] create page
 - [ ] liked page
