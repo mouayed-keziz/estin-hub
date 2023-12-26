@@ -15,7 +15,7 @@ export const metadata = {
   title: "ESTIN-HUB",
   description: "ESTIN-HUB is a platform for ESTIN students to share their projects and ideas.",
   verification: {
-    google: 'VilpNi6hu483aketPk0q0Hav4pNhtXlo63NBcyxe4dY',
+    google: 'VilpNi6hu483aketPk0q0Hav4pNhtXlo63NBcyxe4dY'
   },
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
