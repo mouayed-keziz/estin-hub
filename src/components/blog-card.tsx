@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, AspectRatio } from '@mantine/core';
 
 
 interface BlogCardProps {
@@ -14,11 +14,12 @@ export default function BlogCard({ title, description, image, owner_role }: Blog
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Card.Section>
-                <Image
-                    src={image}
-                    height={160}
-                    alt="Norway"
-                />
+                <AspectRatio ratio={16 / 9} >
+                    <Image
+                        src={image}
+                        alt="Norway"
+                    />
+                </AspectRatio>
             </Card.Section>
 
             <Group position="apart" mt="md" mb="xs">

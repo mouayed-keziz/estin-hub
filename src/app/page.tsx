@@ -1,5 +1,6 @@
 'use client'
 
+import BlogsSection from "@/components/blogs-section";
 import EventsTable from "@/components/events-table";
 import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
@@ -11,10 +12,16 @@ export default function Page() {
       <Navbar />
       <Space h={100} />
 
-      <Container>
+      <Container size='lg'>
         <Hero />
         <Space h={100} />
         <EventsTable />
+        <Space h={100} />
+        <BlogsSection title="Recent Blogs" search_query="/search?recent" />
+        <Space h={100} />
+        <BlogsSection title="Students Blogs" search_query="/search?student" />
+        <Space h={100} />
+        <BlogsSection title="Prof Blogs" search_query="/search?prof" />
       </Container>
 
 
