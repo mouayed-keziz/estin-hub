@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Container, Divider, Group, Loader, Text, Menu, Avatar, Box, Title, useMantineColorScheme } from "@mantine/core";
+import { Button, Container, Divider, Group, Loader, Text, Menu, Avatar, Box, Title, useMantineColorScheme, Autocomplete } from "@mantine/core";
 import { IconSearch, IconTrash, IconUser, IconHeart, IconPlus, IconLogout, IconMoonStars, IconSun } from '@tabler/icons-react';
 
 
@@ -15,6 +15,11 @@ export default function Navbar() {
             <Container size='lg' py='xs'>
                 <Group position="apart">
                     <Title order={3} fw={'bold'}>ESTIN-HUB</Title>
+                    <Autocomplete sx={theme => ({
+                        [theme.fn.smallerThan('md')]: {
+                            display: 'none'
+                        }
+                    })} placeholder='Search for blogs' icon={<IconSearch />} data={['1', '2', '3', '4']} />
                     {status === 'loading' && <Loading />}
                     {status === 'authenticated' && <UserDropDown />}
                     {status === 'unauthenticated' && <LoginButton />}
@@ -78,7 +83,7 @@ function UserDropDown() {
 function LoginButton() {
     return (
         <>
-            <Button onClick={() => signIn('google')}>AUTHENTICATE</Button>
+            <Button variant="light" onClick={() => signIn('google')}>AUTHENTICATE</Button>
         </>
     );
 }

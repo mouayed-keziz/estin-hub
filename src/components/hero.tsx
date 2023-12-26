@@ -1,5 +1,5 @@
 'use client'
-import { Anchor, Autocomplete, Container, Text, Title } from "@mantine/core";
+import { Anchor, Autocomplete, Text, Title } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 
 export default function Hero() {
