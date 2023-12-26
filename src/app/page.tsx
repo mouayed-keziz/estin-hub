@@ -2,6 +2,7 @@
 
 import BlogsSection from "@/components/blogs-section";
 import EventsTable from "@/components/events-table";
+import Footer from "@/components/footer";
 import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
 import { Container, Space } from "@mantine/core";
@@ -23,6 +24,8 @@ export default function Page() {
         <Space h={100} />
         <BlogsSection title="Prof Blogs" search_query="/search?prof" />
       </Container>
+      <Space h={100} />
+      <Footer />
 
 
     </>

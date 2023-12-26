@@ -1,6 +1,6 @@
 'use client'
 
-import { Anchor, Table } from "@mantine/core";
+import { Anchor, ScrollArea, Table } from "@mantine/core";
 
 const events = [
     {
@@ -46,17 +46,19 @@ export default function EventsTable() {
     ));
     return (
         <>
-            <Table horizontalSpacing="xl" verticalSpacing="lg" fontSize="lg">
-                <thead>
-                    <tr>
-                        <th>Event name</th>
-                        <th>Club name</th>
-                        <th>Date</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </Table>
+            <ScrollArea>
+                <Table sx={{ width: '100%', overflow: 'scroll' }} horizontalSpacing="xl" verticalSpacing="lg" fontSize="lg">
+                    <thead>
+                        <tr>
+                            <th>Event name</th>
+                            <th>Club name</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                </Table>
+            </ScrollArea>
         </>
     )
 }
