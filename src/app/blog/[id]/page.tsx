@@ -5,8 +5,8 @@ import { ActionIcon, Anchor, AspectRatio, Avatar, Badge, Box, Card, Container, D
 import { useMediaQuery } from "@mantine/hooks";
 import { IconBookmark, IconMessageCircle, IconStar } from "@tabler/icons-react"
 
-export default function BlogPage({ _params }: { _params: { id: string } }) {
-    // const id = params.id;
+export default function BlogPage({ params }: { params: { id: string } }) {
+    const id = params.id;
     return (
         <>
             <Navbar />
