@@ -51,11 +51,13 @@ export default function BlogPage({ params }: { params: { id: string } }) {
 
 
 function BlogContent({ blog, author }: { blog: Blog | null, author: User | null }) {
+    if ((!blog) || (!author)) return null;
+
     return (
         <>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
                 <AspectRatio ratio={16 / 9}>
-                    <Image fit="cover" radius='lg' alt='blog name' src={blog!.image as string} />
+                    <Image fit="cover" radius='lg' alt='blog name' src={blog.image as string} />
                 </AspectRatio>
                 <Space h={20} />
                 <Group position="left">
