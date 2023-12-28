@@ -68,5 +68,13 @@ export const blogRouter = createTRPCRouter({
 
       if (blog) return blog
       else throw new Error("Failed to publish blog")
-    })
+    }),
+
+  // -----------------------------------------------------------------------------------------------
+
+  get_blog_by_id: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.blog.findFirst({ where: { id: input.id } });
+    }),
 });
