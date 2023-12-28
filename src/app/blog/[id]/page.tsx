@@ -10,7 +10,7 @@ import { IconBookmark, IconMessageCircle, IconStar } from "@tabler/icons-react"
 import { useSession } from "next-auth/react";
 import { useForm } from "@mantine/form"
 export default function BlogPage({ params }: { params: { id: string } }) {
-    const { data, isLoading, refetch } = api.blog.get_blog_by_id.useQuery({ id: params.id });
+    const { data, isLoading } = api.blog.get_blog_by_id.useQuery({ id: params.id });
 
     return (
         <>
@@ -53,54 +53,56 @@ export default function BlogPage({ params }: { params: { id: string } }) {
 function BlogContent({ blog, author }: { blog: Blog | null, author: User | null }) {
     return (
         <>
-            <AspectRatio ratio={16 / 9}>
-                <Image fit="cover" radius='lg' alt='blog name' src={blog?.image as string} />
-            </AspectRatio>
-            <Space h={20} />
-            <Group position="left">
-                <Avatar src={author?.image} color="primary" radius='xl' size='lg'>{author?.name?.charAt(0)}</Avatar>
-                <Stack spacing={0} align="start" justify="flex-start">
-                    <Text size='xl'>{author?.name}</Text>
-                    <Text color='dimmed' size='md'>
-                        Posted on {blog?.createdAt.toLocaleDateString()}
-                        {blog?.updatedAt.toLocaleDateString() !== blog?.createdAt.toLocaleDateString() && " • Updated on " + blog?.updatedAt.toLocaleDateString()}
-                    </Text>
-                </Stack>
-            </Group>
-            <Space h={20} />
-            <Group spacing='xl' position="left">
-                <Text size='xl'>Views 127 (TODO)</Text>
-                <Text size='xl'>Saves 50 (TODO)</Text>
-                <Text size='xl'>Rating 3.5/5 (TODO)</Text>
-            </Group>
-            <Group sx={theme => ({
-                [theme.fn.largerThan("md")]: { display: "none" }
-            })} position="left" spacing='xl'>
-                <ActionIcon color="dark" size="xl" radius="xl">
-                    <IconStar size="2.125rem" />
-                </ActionIcon>
-                <ActionIcon color="dark" size="xl" radius="xl">
-                    <IconMessageCircle size="2.125rem" />
-                </ActionIcon>
-                <ActionIcon color="dark" size="xl" radius="xl">
-                    <IconBookmark size="2.125rem" />
-                </ActionIcon>
-            </Group>
-            <Space h={20} />
-            <Title >{blog?.title}</Title>
-            <Space h={20} />
-            <Group spacing='md' position="left">
+            <Card shadow="sm" padding="lg" radius="md" withBorder>
+                <AspectRatio ratio={16 / 9}>
+                    <Image fit="cover" radius='lg' alt='blog name' src={blog!.image as string} />
+                </AspectRatio>
+                <Space h={20} />
+                <Group position="left">
+                    <Avatar src={author?.image} color="primary" radius='xl' size='lg'>{author?.name?.charAt(0)}</Avatar>
+                    <Stack spacing={0} align="start" justify="flex-start">
+                        <Text size='xl'>{author?.name}</Text>
+                        <Text color='dimmed' size='md'>
+                            Posted on {blog?.createdAt.toLocaleDateString()}
+                            {blog?.updatedAt.toLocaleDateString() !== blog?.createdAt.toLocaleDateString() && " • Updated on " + blog?.updatedAt.toLocaleDateString()}
+                        </Text>
+                    </Stack>
+                </Group>
+                <Space h={20} />
+                <Group spacing='xl' position="left">
+                    <Text size='xl'>Views 127 (TODO)</Text>
+                    <Text size='xl'>Saves 50 (TODO)</Text>
+                    <Text size='xl'>Rating 3.5/5 (TODO)</Text>
+                </Group>
+                <Group sx={theme => ({
+                    [theme.fn.largerThan("md")]: { display: "none" }
+                })} position="left" spacing='xl'>
+                    <ActionIcon color="dark" size="xl" radius="xl">
+                        <IconStar size="2.125rem" />
+                    </ActionIcon>
+                    <ActionIcon color="dark" size="xl" radius="xl">
+                        <IconMessageCircle size="2.125rem" />
+                    </ActionIcon>
+                    <ActionIcon color="dark" size="xl" radius="xl">
+                        <IconBookmark size="2.125rem" />
+                    </ActionIcon>
+                </Group>
+                <Space h={20} />
+                <Title >{blog?.title}</Title>
+                <Space h={20} />
+                <Group spacing='md' position="left">
 
 
-                {blog?.tags && (
-                    (blog.tags as string).split(' ').map((tag: string, index: number) =>
-                        <Badge key={index} variant="filled">{tag}</Badge>
-                    )
-                )}
-            </Group>
+                    {blog?.tags && (
+                        (blog.tags as string).split(' ').map((tag: string, index: number) =>
+                            <Badge key={index} variant="filled">{tag}</Badge>
+                        )
+                    )}
+                </Group>
 
-            <Space h={20} />
-            <Box dangerouslySetInnerHTML={{ __html: blog?.content ?? "" }} />
+                <Space h={20} />
+                <Box dangerouslySetInnerHTML={{ __html: blog?.content ?? "" }} />
+            </Card>
         </>
     )
 }
@@ -173,7 +175,7 @@ function BlogActions() {
 
 
 function CommentsSection({ blogId }: { blogId: string }) {
-    const { data, isSuccess, refetch } = api.blog.get_blog_comments.useQuery({ id: blogId })
+    const { data, refetch } = api.blog.get_blog_comments.useQuery({ id: blogId })
     const { mutate } = api.blog.create_comment.useMutation({
         onSuccess() {
             void refetch();
@@ -197,7 +199,7 @@ function CommentsSection({ blogId }: { blogId: string }) {
         form.reset();
     }
     return (
-        <Box px="sm">
+        <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Title order={2}>
                 Comments
             </Title>
@@ -249,6 +251,6 @@ function CommentsSection({ blogId }: { blogId: string }) {
             {data?.length === 0 && (
                 <Text align="center" size="xl">No comments yet</Text>
             )}
-        </Box>
+        </Card>
     );
 }

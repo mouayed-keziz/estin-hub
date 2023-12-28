@@ -1,5 +1,5 @@
 import { Badge } from "@mantine/core";
-import { ROLE } from "@prisma/client";
+import { type ROLE } from "@prisma/client";
 
 export default function BadgeWithRole({ role }: { role: ROLE }) {
 

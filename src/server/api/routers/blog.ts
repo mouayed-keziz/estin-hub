@@ -4,12 +4,8 @@ import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
-  studentProcedure,
-  teacherProcedure,
-  clubProcedure,
 } from "@/server/api/trpc";
-import { TRPCError } from "@trpc/server";
-import { Blog } from "@prisma/client";
+import { type Blog } from "@prisma/client";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
