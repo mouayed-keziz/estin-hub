@@ -25,6 +25,7 @@ model Blog {
     author      User       @relation(name: "BlogToUser", fields: [createdById], references: [id])
     createdById String
     comments    Comment[]  @relation(name: "BlogToComment")
+    tags        String?
 
     @@index([title])
 }

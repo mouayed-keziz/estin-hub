@@ -1,6 +1,7 @@
 'use client'
 
-import { Card, Image, Text, Badge, Button, Group, AspectRatio, Stack, Box } from '@mantine/core';
+import { Card, Image, Text, Button, Group, AspectRatio, Stack, Box } from '@mantine/core';
+import BadgeWithRole from '@/components/badge-with-role';
 
 
 interface BlogCardProps {
@@ -43,18 +44,3 @@ export default function BlogCard({ title, author, image, owner_role }: BlogCardP
 }
 
 
-function BadgeWithRole({ role }: { role: "STUDENT" | "TEACHER" | "CLUB" }) {
-
-    const color = {
-        "STUDENT": "blue",
-        "TEACHER": "pink",
-        "CLUB": "green"
-    }
-    return (
-        <>
-            <Badge color={color[role]} variant="light">
-                {role}
-            </Badge>
-        </>
-    );
-}

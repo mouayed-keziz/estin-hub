@@ -8,6 +8,8 @@ import {
   teacherProcedure,
   clubProcedure,
 } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
+import { Blog } from "@prisma/client";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
@@ -73,6 +75,52 @@ export const blogRouter = createTRPCRouter({
   get_blog_by_id: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.blog.findFirst({ where: { id: input.id } });
+      const blog = await ctx.db.blog.findFirst({ where: { id: input.id } });
+      if (blog) {
+
+        const author = await ctx.db.user.findFirst({ where: { id: blog.createdById } });
+        const comments = await ctx.db.comment.findMany({ where: { blogId: blog.id }, include: { createdBy: true }, orderBy: { createdAt: "desc" } });
+        const related_blogs: Blog[] = await ctx.db.blog.findMany({ where: { createdById: blog.createdById, id: { not: blog.id } }, take: 3, orderBy: { createdAt: "desc" } });
+
+
+        if (author) return { message: "success", blog, author, comments, related_blogs }
+        else return { message: "failed", blog: null, author: null }
+      }
+      else return { message: "failed", blog: null, author: null }
+    }),
+
+
+  get_blog_by_id2: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const blog = await ctx.db.blog.findFirst({ where: { id: input.id } });
+      if (blog) {
+        const author = await ctx.db.user.findFirst({ where: { id: blog.createdById } });
+        if (author) {
+          const related_blogs: Blog[] = await ctx.db.blog.findMany({ where: { createdById: blog.createdById, id: { not: blog.id } }, take: 3, orderBy: { createdAt: "desc" } });
+          return { message: "success", blog, author, related_blogs }
+        } else return { message: "failed", blog: null, author: null, related_blogs: null }
+      } else return { message: "failed", blog: null, author: null, related_blogs: null }
+    }),
+
+  get_blog_comments: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const comments = await ctx.db.comment.findMany({ where: { blogId: input.id }, include: { createdBy: true }, orderBy: { createdAt: "desc" } });
+      return comments
+    }),
+
+  // -----------------------------------------------------------------------------------------------
+
+  create_comment: protectedProcedure
+    .input(z.object({ comment: z.string(), blogId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.comment.create({
+        data: {
+          content: input.comment,
+          blog: { connect: { id: input.blogId } },
+          createdBy: { connect: { id: ctx.session.user.id } }
+        }
+      })
     }),
 });
