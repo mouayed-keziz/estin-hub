@@ -118,7 +118,7 @@ enum BlogStatus {
 
 enum ROLE {
     STUDENT
-    PROF
+    TEACHER
     CLUB
 }
 
