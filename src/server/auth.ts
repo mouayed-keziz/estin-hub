@@ -40,12 +40,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        role: user.role,
-      },
+      user : user
     }),
   },
   adapter: PrismaAdapter(db),
