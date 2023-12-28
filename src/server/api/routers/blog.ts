@@ -35,7 +35,6 @@ export const blogRouter = createTRPCRouter({
       content: z.string(),
     }))
     .query(async ({ ctx, input }) => {
-      console.log("hello worldf")
       const new_blog = await ctx.db.blog.create({
         data: {
           title: input.title,
@@ -52,7 +51,6 @@ export const blogRouter = createTRPCRouter({
   delete_blog: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      console.log("hell oworld")
       const blog = await ctx.db.blog.delete({ where: { id: input.id, author: { id: ctx.session.user.id } } });
 
       if (blog) return blog
