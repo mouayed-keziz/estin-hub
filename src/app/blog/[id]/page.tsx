@@ -2,10 +2,11 @@
 
 import Navbar from "@/components/navbar"
 import { ActionIcon, Anchor, AspectRatio, Avatar, Badge, Box, Card, Container, Divider, Grid, Group, Image, Space, Stack, Text, Textarea, Title } from "@mantine/core"
+import { useMediaQuery } from "@mantine/hooks";
 import { IconBookmark, IconMessageCircle, IconStar } from "@tabler/icons-react"
 
-export default function BlogPage({ params }: { params: { id: string } }) {
-    const id = params.id;
+export default function BlogPage({ _params }: { _params: { id: string } }) {
+    // const id = params.id;
     return (
         <>
             <Navbar />
@@ -13,13 +14,17 @@ export default function BlogPage({ params }: { params: { id: string } }) {
 
             <Container size='xl'>
                 <Grid>
-                    <Grid.Col span={1}>
+                    <Grid.Col sx={theme => ({
+                        [theme.fn.smallerThan('md')]: { display: "none" }
+                    })} span={0} md={1}>
                         <BlogActions />
                     </Grid.Col>
-                    <Grid.Col span={7}>
+                    <Grid.Col span={12} md={7}>
                         <BlogContent />
                     </Grid.Col>
-                    <Grid.Col span={4}>
+                    <Grid.Col sx={theme => ({
+                        [theme.fn.smallerThan('md')]: { display: "none" }
+                    })} span={0} md={4}>
                         <OwnerInfo />
                         <Space h={30} />
                         <MoreOwnerBlogs />
@@ -54,6 +59,19 @@ function BlogContent() {
                 <Text size='xl'>Views 127</Text>
                 <Text size='xl'>Saves 50</Text>
                 <Text size='xl'>Rating 3.5/5</Text>
+            </Group>
+            <Group sx={theme => ({
+                [theme.fn.largerThan("md")]: { display: "none" }
+            })} position="left" spacing='xl'>
+                <ActionIcon color="dark" size="xl" radius="xl">
+                    <IconStar size="2.125rem" />
+                </ActionIcon>
+                <ActionIcon color="dark" size="xl" radius="xl">
+                    <IconMessageCircle size="2.125rem" />
+                </ActionIcon>
+                <ActionIcon color="dark" size="xl" radius="xl">
+                    <IconBookmark size="2.125rem" />
+                </ActionIcon>
             </Group>
             <Space h={20} />
             <Title >Blog title</Title>
@@ -135,12 +153,12 @@ function BlogActions() {
 }
 
 function BlogComments() {
-
+    const isMobile = useMediaQuery('(max-width: 768px)');
     const OneComment = () => (
         <Grid mb={20}>
             <Grid.Col span={1} >
                 <Group position="right" align="center">
-                    <Avatar radius='xl' size='lg' color="primary">M</Avatar>
+                    <Avatar radius='xl' size={isMobile ? "md" : "lg"} color="primary">M</Avatar>
                 </Group>
             </Grid.Col>
             <Grid.Col span={11}>
@@ -155,31 +173,32 @@ function BlogComments() {
 
     return (
         <>
-            <Title order={2}>
-                Comments
-            </Title>
-            <Space h={20} />
-            <Grid mb={40}>
-                <Grid.Col span={1} >
-                    <Group position="right" align="center">
-                        <Avatar radius='xl' size='lg' color="primary">M</Avatar>
-                    </Group>
-                </Grid.Col>
-                <Grid.Col span={11}>
-                    <Textarea
-                        placeholder="Your comment"
-                        label="Your comment"
-                        size="lg"
+            <Box px="sm">
+                <Title order={2}>
+                    Comments
+                </Title>
+                <Space h={20} />
+                <Grid mb={40}>
+                    <Grid.Col span={1} >
+                        <Group position="right" align="center">
+                            <Avatar radius='xl' size={isMobile ? "lg" : "xl"} color="primary">M</Avatar>
+                        </Group>
+                    </Grid.Col>
+                    <Grid.Col span={11}>
+                        <Textarea
+                            placeholder="Your comment"
+                            label="Your comment"
+                            size="lg"
 
-                    />
-                </Grid.Col>
-            </Grid>
+                        />
+                    </Grid.Col>
+                </Grid>
 
-            <OneComment />
-            <OneComment />
-            <OneComment />
-            <OneComment />
-
+                <OneComment />
+                <OneComment />
+                <OneComment />
+                <OneComment />
+            </Box>
         </>
     )
 }

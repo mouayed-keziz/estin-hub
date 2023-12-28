@@ -43,6 +43,7 @@ function UserDropDown() {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     const dark = colorScheme === 'dark';
+
     return (
         <>
             <Menu trigger="hover" shadow="md" width={200}>
@@ -55,7 +56,7 @@ function UserDropDown() {
                             }
                         })}>
                             <Text>{data?.user.name}</Text>
-                            <Text color="dimmed">{data?.user.email}</Text>
+                            <Text color="dimmed">{data?.user.role}</Text>
                         </Box>
                     </Group>
 

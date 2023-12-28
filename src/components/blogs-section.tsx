@@ -11,24 +11,31 @@ interface BlogCardProps {
     search_query: string;
 }
 
-const blogs = [
+interface Blog {
+    title: string;
+    author: string;
+    image: string;
+    owner_role: "STUDENT" | "TEACHER" | "CLUB";
+}
+
+const blogs: Blog[] = [
     {
         title: 'Norway Fjord Adventures',
-        description: ' the fjords of Norway',
+        author: '@mouayed_keziz',
         image: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
-        owner_role: 'Student'
+        owner_role: 'STUDENT'
     },
     {
         title: 'Norway Fjord Adventures',
-        description: 'With Fjord Tours you can explore more of the magical fjord landscapes with tours and activities on and around the fjords of Norway',
+        author: '@mouayed_keziz',
         image: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
-        owner_role: 'Student'
+        owner_role: 'TEACHER'
     },
     {
         title: 'Norway Fjord Adventures',
-        description: 'With Fjord Tours you can explore more of the magical fjord landscapes with tours and activities on and around the fjords of Norway',
+        author: '@mouayed_keziz',
         image: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
-        owner_role: 'Student'
+        owner_role: 'CLUB'
     }
 ]
 
@@ -47,7 +54,7 @@ export default function BlogsSection({ title, search_query }: BlogCardProps) {
             <Grid justify="center" grow>
                 {blogs.map((blog) => (
                     <Grid.Col key={blog.title} span={12} md={6} lg={4}>
-                        <BlogCard title={blog.title} description={blog.description} image={blog.image} owner_role={blog.owner_role} />
+                        <BlogCard title={blog.title} author={blog.author} image={blog.image} owner_role={blog.owner_role} />
                     </Grid.Col>
                 ))}
             </Grid>

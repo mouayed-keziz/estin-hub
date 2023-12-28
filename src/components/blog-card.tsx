@@ -5,12 +5,12 @@ import { Card, Image, Text, Badge, Button, Group, AspectRatio, Stack, Box } from
 
 interface BlogCardProps {
     title: string;
-    description: string;
+    author: string;
     image: string;
-    owner_role: string;
+    owner_role: "STUDENT" | "TEACHER" | "CLUB";
 }
 
-export default function BlogCard({ title, description, image, owner_role }: BlogCardProps) {
+export default function BlogCard({ title, author, image, owner_role }: BlogCardProps) {
     return (
         <Card sx={{ height: '100%' }} shadow="sm" padding="lg" radius="md" withBorder>
 
@@ -25,15 +25,13 @@ export default function BlogCard({ title, description, image, owner_role }: Blog
                         </AspectRatio>
                     </Card.Section>
 
-                    <Group position="apart" mt="md" mb="xs">
+                    <Group position="apart" mt="md">
                         <Text weight={500}>{title}</Text>
-                        <Badge color="pink" variant="light">
-                            {owner_role}
-                        </Badge>
+                        <BadgeWithRole role={owner_role} />
                     </Group>
 
                     <Text size="sm" color="dimmed">
-                        {description}
+                        {author}
                     </Text>
                 </Box>
                 <Button variant="light" color="blue" fullWidth mt="md" radius="md">
@@ -41,5 +39,22 @@ export default function BlogCard({ title, description, image, owner_role }: Blog
                 </Button>
             </Stack>
         </Card>
+    );
+}
+
+
+function BadgeWithRole({ role }: { role: "STUDENT" | "TEACHER" | "CLUB" }) {
+
+    const color = {
+        "STUDENT": "blue",
+        "TEACHER": "pink",
+        "CLUB": "green"
+    }
+    return (
+        <>
+            <Badge color={color[role]} variant="light">
+                {role}
+            </Badge>
+        </>
     );
 }

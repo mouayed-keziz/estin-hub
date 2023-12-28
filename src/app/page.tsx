@@ -22,7 +22,7 @@ export default function Page() {
         <Space h={100} />
         <BlogsSection title="Students Blogs" search_query="/search?student" />
         <Space h={100} />
-        <BlogsSection title="Prof Blogs" search_query="/search?prof" />
+        <BlogsSection title="Teachers Blogs" search_query="/search?teacher" />
       </Container>
       <Space h={100} />
       <Footer />

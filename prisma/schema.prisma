@@ -16,16 +16,17 @@ datasource db {
 
 model Blog {
     id          String     @id @default(cuid())
-    name        String
+    title       String
+    image       String?
     content     String
     createdAt   DateTime   @default(now())
     updatedAt   DateTime   @updatedAt
     status      BlogStatus @default(DRAFT)
-    createdBy   User       @relation(name: "BlogToUser", fields: [createdById], references: [id])
+    author      User       @relation(name: "BlogToUser", fields: [createdById], references: [id])
     createdById String
     comments    Comment[]  @relation(name: "BlogToComment")
 
-    @@index([name])
+    @@index([title])
 }
 
 model Comment {
@@ -83,14 +84,6 @@ model Session {
     expires      DateTime
     user         User     @relation(name: "SessionToUser", fields: [userId], references: [id])
 }
-
-// model VerificationToken {
-//     identifier String
-//     token      String   @unique
-//     expires    DateTime
-
-//     @@unique([identifier, token])
-// }
 
 model Event {
     id     String   @id @default(cuid())
