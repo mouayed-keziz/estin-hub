@@ -57,7 +57,16 @@ export const blogRouter = createTRPCRouter({
 
       if (blog) return blog
       else throw new Error("Failed to delete blog")
-    })
+    }),
 
   // -----------------------------------------------------------------------------------------------
+
+  publish_blog: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const blog = await ctx.db.blog.update({ where: { id: input.id, author: { id: ctx.session.user.id } }, data: { status: "PUBLISHED" } });
+
+      if (blog) return blog
+      else throw new Error("Failed to publish blog")
+    })
 });
