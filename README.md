@@ -25,13 +25,10 @@ The project involves developing a dedicated web platform for non-academic commun
 - `prisma`
 - `mantine ui`
 
-
-
 ### TODO
 
-- [x] navbar
-- [x] main page 
-- [ ] search page
-- [ ] create page
+- [x] main page
+- [x] blog page
+- [ ] profile page (informations, my blogs)
 - [ ] liked page
-- [ ] blog page
+- [ ] search page
