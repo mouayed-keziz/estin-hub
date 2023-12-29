@@ -18,7 +18,7 @@ export default function OwnerInfo({ author }: { author: User | null }) {
                     </Stack>
                 </Group>
                 <Space h={20} />
-                <Text size='lg'><b>BIO  :</b> TODO</Text>
+                {author.bio && <Text size='lg'><b>BIO  :</b>{author.bio}</Text>}
                 <Space h={30} />
                 <Stack>
                     <Text size='md'><b>email  :</b> {author?.email}</Text>
