@@ -6,6 +6,7 @@ import BadgeWithRole from "@/components/badge-with-role";
 import Link from "next/link";
 
 export default function OwnerInfo({ author }: { author: User | null }) {
+    if (!author) return (null)
     return (
         <>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -22,6 +23,7 @@ export default function OwnerInfo({ author }: { author: User | null }) {
                 <Stack>
                     <Text size='md'><b>email  :</b> {author?.email}</Text>
                     <Text size='md'><b>level  :</b> TODO</Text>
+                    {/*  eslint-disable-next-line @typescript-eslint/no-unsafe-call */}
                     <Text size='md'><b>joined :</b> TODO</Text>
                 </Stack>
             </Card>

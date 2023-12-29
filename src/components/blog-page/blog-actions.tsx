@@ -4,9 +4,15 @@ import { api } from "@/trpc/react";
 import { ActionIcon, Flex, Popover, Rating, Stack, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconBookmark, IconMessageCircle, IconStar } from "@tabler/icons-react";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 export default function BlogActions({ blogId }: { blogId: string }) {
-    const { data } = api.blog.number_of_comments.useQuery({ id: blogId })
+    const { data, refetch } = api.blog.get_blog_stats.useQuery({ id: blogId })
+    const my_rating = api.blog.get_my_rating_for_blog.useQuery({ id: blogId })
+    const rate_blog = api.blog.rate_blog.useMutation();
+    const session = useSession();
+    const [rating, setRating] = useState(my_rating.data ?? 0);
 
     const scrollToId = (id: string) => {
         const element = document.getElementById(id);
@@ -17,6 +23,14 @@ export default function BlogActions({ blogId }: { blogId: string }) {
                 behavior: 'smooth'
             });
         }
+    }
+
+    const rate_blog_handeler = (value: number) => {
+        console.log(value)
+        setRating(value);
+        void rate_blog.mutateAsync({ blogId: blogId, rating: value }).then(async () => {
+            await refetch();
+        });
     }
 
     const isMobile = useMediaQuery('(max-width: 64em)');
@@ -30,16 +44,28 @@ export default function BlogActions({ blogId }: { blogId: string }) {
                 wrap="nowrap"
             >
                 <Popover width={200} position="top" withArrow shadow="md">
-                    <Popover.Target>
+                    {session.status === "unauthenticated" && (
                         <Stack spacing={0}>
-                            <ActionIcon color="dark" size="xl" radius="xl">
+                            <ActionIcon disabled color="dark" size="xl" radius="xl">
                                 <IconStar size="2.125rem" />
                             </ActionIcon>
-                            <Text align="center">TODO</Text>
+                            <Text align="center">{data?.avg_rating}</Text>
                         </Stack>
-                    </Popover.Target>
+                    )}
+
+                    {session.status === "authenticated" && (
+                        <Popover.Target>
+                            <Stack spacing={0}>
+                                <ActionIcon color="dark" size="xl" radius="xl">
+                                    <IconStar size="2.125rem" />
+                                </ActionIcon>
+                                <Text align="center">{data?.avg_rating}</Text>
+                            </Stack>
+                        </Popover.Target>
+                    )}
+
                     <Popover.Dropdown>
-                        <Rating defaultValue={2} size="xl" />
+                        <Rating value={rating} onChange={(value: number) => rate_blog_handeler(value)} size="xl" />
                     </Popover.Dropdown>
                 </Popover>
 
@@ -47,11 +73,11 @@ export default function BlogActions({ blogId }: { blogId: string }) {
                     <ActionIcon onClick={() => scrollToId("comment-section")} color="dark" size="xl" radius="xl">
                         <IconMessageCircle size="2.125rem" />
                     </ActionIcon>
-                    <Text align="center">{data}</Text>
+                    <Text align="center">{data?.comments}</Text>
                 </Stack>
 
                 <Stack spacing={0}>
-                    <ActionIcon color="dark" size="xl" radius="xl">
+                    <ActionIcon disabled={session.status === "unauthenticated"} color="dark" size="xl" radius="xl">
                         <IconBookmark size="2.125rem" />
                     </ActionIcon>
                     <Text align="center">TODO</Text>

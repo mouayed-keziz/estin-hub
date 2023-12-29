@@ -107,10 +107,65 @@ export const blogRouter = createTRPCRouter({
   // -----------------------------------------------------------------------------------------------
 
 
-  number_of_comments: publicProcedure
+  get_blog_stats: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const comments = await ctx.db.comment.count({ where: { blogId: input.id } });
-      return comments
+      const ratings = await ctx.db.blog_rating.findMany({ where: { blogId: input.id } });
+      let sum = 0;
+
+      if (ratings.length === 0) return { comments, avg_rating: 0 }
+
+      ratings.forEach(rating => {
+        if (rating.rating !== null) {
+          sum += rating.rating;
+        }
+      });
+
+      const avg_rating = sum / ratings.length;
+      return { comments, avg_rating }
     }),
+
+  // -----------------------------------------------------------------------------------------------
+
+  get_my_rating_for_blog: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const rating = await ctx.db.blog_rating.findFirst({ where: { blogId: input.id, userId: ctx.session.user.id } });
+      if (rating) return rating.rating ?? 0
+      else return 0
+    }),
+
+  // -----------------------------------------------------------------------------------------------
+
+  rate_blog: protectedProcedure
+    .input(z.object({ blogId: z.string(), rating: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const existingRating = await ctx.db.blog_rating.findFirst({ where: { blogId: input.blogId, userId: ctx.session.user.id } });
+
+      if (existingRating) {
+        await ctx.db.blog_rating.update({
+          where: { id: existingRating.id },
+          data: { rating: input.rating }
+        });
+      } else {
+        await ctx.db.blog_rating.create({
+          data: {
+            blog: { connect: { id: input.blogId } },
+            user: { connect: { id: ctx.session.user.id } },
+            rating: input.rating
+          }
+        });
+      }
+
+      const ratings = await ctx.db.blog_rating.findMany({ where: { blogId: input.blogId } });
+      let sum = 0;
+      ratings.forEach(rating => {
+        if (rating.rating !== null) {
+          sum += rating.rating;
+        }
+      });
+      const avg = sum / ratings.length;
+      await ctx.db.blog.update({ where: { id: input.blogId }, data: { rating: avg } });
+    })
 });

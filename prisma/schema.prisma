@@ -15,17 +15,19 @@ datasource db {
 }
 
 model Blog {
-    id          String     @id @default(cuid())
+    id          String       @id @default(cuid())
     title       String
     image       String
     content     String
-    createdAt   DateTime   @default(now())
-    updatedAt   DateTime   @updatedAt
-    status      BlogStatus @default(DRAFT)
-    author      User       @relation(name: "BlogToUser", fields: [createdById], references: [id])
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    status      BlogStatus   @default(DRAFT)
+    author      User         @relation(name: "BlogToUser", fields: [createdById], references: [id])
     createdById String
-    comments    Comment[]  @relation(name: "BlogToComment")
-    tags        String     @default("[]")
+    comments    Comment[]    @relation(name: "BlogToComment")
+    tags        String       @default("[]")
+    blog_rating Blog_rating? @relation(name: "BlogToblog_rating")
+    rating      Int?         @default(0)
 
     @@index([title])
 }
@@ -56,6 +58,11 @@ model User {
     comments      Comment[]             @relation(name: "CommentToUser")
     events        Event[]               @relation(name: "EventToUser")
     announcements Object_announcement[] @relation(name: "object_announcementToUser")
+    ratings       Blog_rating[]         @relation(name: "blog_ratingToUser")
+    bio           String?
+    level         String?
+    createdAt     DateTime              @default(now())
+    updatedAt     DateTime              @updatedAt
 
     @@index(email)
 }
@@ -110,6 +117,15 @@ model Object_announcement {
     owner    User?          @relation(name: "object_announcementToUser", fields: [userId], references: [id])
     object   Object         @relation(name: "objetToobject_announcement", fields: [objectId], references: [id])
     objectId String         @unique
+}
+
+model Blog_rating {
+    id     String  @id @default(cuid())
+    userId String?
+    user   User?   @relation(name: "blog_ratingToUser", fields: [userId], references: [id])
+    blog   Blog?   @relation(name: "BlogToblog_rating", fields: [blogId], references: [id])
+    blogId String? @unique
+    rating Int?    @default(0)
 }
 
 enum BlogStatus {

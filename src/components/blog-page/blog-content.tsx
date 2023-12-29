@@ -3,6 +3,7 @@
 import { AspectRatio, Avatar, Box, Card, Divider, Group, Image, Space, Stack, Text, Title } from "@mantine/core"
 import { type Blog, type User } from "@prisma/client"
 import Link from "next/link"
+import BlogActions from "@/components/blog-page/blog-actions"
 
 
 export default function BlogContent({ blog, author }: { blog: Blog | null, author: User | null }) {
@@ -28,7 +29,7 @@ export default function BlogContent({ blog, author }: { blog: Blog | null, autho
                 </Group>
                 <Space h={20} />
                 <Box sx={theme => ({ [theme.fn.largerThan("md")]: { display: "none" } })}>
-                    {/* <BlogActions blogId={blog.id} /> */}
+                    <BlogActions blogId={blog.id} />
                 </Box>
                 <Space h={20} />
                 <Title >{blog?.title}</Title>
