@@ -6,6 +6,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { type Blog } from "@prisma/client";
+import { cp } from "fs";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
@@ -106,24 +107,59 @@ export const blogRouter = createTRPCRouter({
 
   // -----------------------------------------------------------------------------------------------
 
+  like_blog: protectedProcedure
+    .input(z.object({ blogId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.user.update({
+        where: {
+          id: ctx.session.user.id
+        },
+        data: {
+          saved_blogs: { connect: { id: input.blogId } }
+        }
+      })
+    }),
+
+  // -----------------------------------------------------------------------------------------------
+
+  unlike_blog: protectedProcedure
+    .input(z.object({ blogId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.user.update({
+        where: {
+          id: ctx.session.user.id
+        },
+        data: {
+          saved_blogs: { disconnect: { id: input.blogId } }
+        }
+      })
+    }),
+
+  // -----------------------------------------------------------------------------------------------
 
   get_blog_stats: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const comments = await ctx.db.comment.count({ where: { blogId: input.id } });
-      const ratings = await ctx.db.blog_rating.findMany({ where: { blogId: input.id } });
-      let sum = 0;
-
-      if (ratings.length === 0) return { comments, avg_rating: 0 }
-
-      ratings.forEach(rating => {
-        if (rating.rating !== null) {
-          sum += rating.rating;
-        }
+      const blog = await ctx.db.blog.findFirst({
+        where: { id: input.id }, select: { saved_by: true, comments: true, blog_rating: true }
       });
+      if (blog) {
+        const comments: number = blog.comments.length
+        const saves: number = blog.saved_by.length;
+        const rating_length: number = blog.blog_rating.length
+        if (rating_length === 0) return { comments, avg_rating: 0, saves }
+        else {
+          let sum = 0;
+          blog.blog_rating.forEach(rating => {
+            if (rating.rating !== null) {
+              sum += rating.rating;
+            }
+          });
 
-      const avg_rating = sum / ratings.length;
-      return { comments, avg_rating }
+          const avg_rating = sum / rating_length;
+          return { comments, avg_rating, saves }
+        }
+      }
     }),
 
   // -----------------------------------------------------------------------------------------------
@@ -134,6 +170,17 @@ export const blogRouter = createTRPCRouter({
       const rating = await ctx.db.blog_rating.findFirst({ where: { blogId: input.id, userId: ctx.session.user.id } });
       if (rating) return rating.rating ?? 0
       else return 0
+    }),
+
+  // -----------------------------------------------------------------------------------------------
+
+  get_my_like_for_blog: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      // check if the blog is saved by ctx.session.user.id
+      const blog = await ctx.db.blog.findFirst({ where: { id: input.id, saved_by: { some: { id: ctx.session.user.id } } } });
+      if (blog) return true
+      else return false
     }),
 
   // -----------------------------------------------------------------------------------------------

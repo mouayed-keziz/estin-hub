@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 
 export default function CommentsSection({ blogId }: { blogId: string }) {
     const { data, refetch } = api.blog.get_blog_comments.useQuery({ id: blogId })
-    const { mutate } = api.blog.create_comment.useMutation({
+    const create_comment = api.blog.create_comment.useMutation({
         onSuccess() {
             void refetch();
         },
@@ -27,9 +27,10 @@ export default function CommentsSection({ blogId }: { blogId: string }) {
     });
 
     const submit_comment_handeler = () => {
-        mutate({ comment: form.values.comment, blogId });
+        create_comment.mutate({ comment: form.values.comment, blogId });
         form.reset();
     }
+
     return (
         <Card id="comment-section" shadow="sm" padding="lg" radius="md" withBorder>
             <Title order={2}>
@@ -49,10 +50,11 @@ export default function CommentsSection({ blogId }: { blogId: string }) {
                                 placeholder="Your comment"
                                 label="Your comment"
                                 size="lg"
+                                disabled={create_comment.isLoading}
                                 {...form.getInputProps('comment')}
                             />
                             <Group position="right">
-                                <Button type="submit" mt="xs" variant="light">SUBMIT COMMENT</Button>
+                                <Button loading={create_comment.isLoading} type="submit" mt="xs" variant="light">SUBMIT COMMENT</Button>
                             </Group>
                         </form>
                     </Grid.Col>

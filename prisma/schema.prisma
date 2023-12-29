@@ -7,10 +7,6 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url      = env("DATABASE_URL")
 }
 
@@ -28,6 +24,7 @@ model Blog {
     tags        String        @default("[]")
     blog_rating Blog_rating[] @relation(name: "BlogToblog_rating")
     rating      Int?          @default(0)
+    saved_by    User[]        @relation(name: "BlogToUser1")
 
     @@index([title])
 }
@@ -63,6 +60,7 @@ model User {
     level         String?
     createdAt     DateTime              @default(now())
     updatedAt     DateTime              @updatedAt
+    saved_blogs   Blog[]                @relation(name: "BlogToUser1")
 
     @@index(email)
 }
