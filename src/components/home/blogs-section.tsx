@@ -3,7 +3,7 @@
 import { Button, Grid, Group, Title } from "@mantine/core";
 import { IconDots } from "@tabler/icons-react";
 import Link from "next/link";
-import BlogCard from "@/components/blog-card";
+import BlogCard from "@/components/home/blog-card";
 
 
 interface BlogCardProps {

@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Container, Divider, Group, Loader, Text, Menu, Avatar, Box, Title, useMantineColorScheme, Autocomplete } from "@mantine/core";
+import { Button, Container, Divider, Group, Loader, Text, Menu, Avatar, Box, useMantineColorScheme, Autocomplete } from "@mantine/core";
 import { IconSearch, IconTrash, IconUser, IconHeart, IconPlus, IconLogout, IconMoonStars, IconSun } from '@tabler/icons-react';
 
 
@@ -14,7 +14,9 @@ export default function Navbar() {
         <>
             <Container size='lg' py='xs'>
                 <Group position="apart">
-                    <Title order={3} fw={'bold'}>ESTIN-HUB</Title>
+
+                    <Text component={Link} href="/" fz="1.5rem" fw={'bold'}>ESTIN-HUB</Text>
+
                     <Autocomplete sx={theme => ({
                         [theme.fn.smallerThan('md')]: {
                             display: 'none'

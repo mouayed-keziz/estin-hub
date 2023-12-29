@@ -1,6 +1,7 @@
 'use client'
 
-import { Anchor, Container, Divider, Group, Title } from "@mantine/core"
+import { Anchor, Container, Divider, Group, Text } from "@mantine/core"
+import Link from "next/link"
 
 export default function Footer() {
     return (
@@ -8,7 +9,7 @@ export default function Footer() {
             <Divider size='xs' />
             <Container my='xl'>
                 <Group position="apart">
-                    <Title order={2}>ESTIN-HUB</Title>
+                    <Text component={Link} href="/" fz="1.5rem" fw={'bold'}>ESTIN-HUB</Text>
                     <Group position="right">
                         <Anchor target="_blank" href='https://estin.dz'>ESTIN</Anchor>
                         <Anchor target="_blank" href='https://bib.gdsc-estin.com'>BIB</Anchor>

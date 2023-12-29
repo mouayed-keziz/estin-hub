@@ -68,25 +68,9 @@ export const blogRouter = createTRPCRouter({
 
   // -----------------------------------------------------------------------------------------------
 
+
+
   get_blog_by_id: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const blog = await ctx.db.blog.findFirst({ where: { id: input.id } });
-      if (blog) {
-
-        const author = await ctx.db.user.findFirst({ where: { id: blog.createdById } });
-        const comments = await ctx.db.comment.findMany({ where: { blogId: blog.id }, include: { createdBy: true }, orderBy: { createdAt: "desc" } });
-        const related_blogs: Blog[] = await ctx.db.blog.findMany({ where: { createdById: blog.createdById, id: { not: blog.id } }, take: 3, orderBy: { createdAt: "desc" } });
-
-
-        if (author) return { message: "success", blog, author, comments, related_blogs }
-        else return { message: "failed", blog: null, author: null }
-      }
-      else return { message: "failed", blog: null, author: null }
-    }),
-
-
-  get_blog_by_id2: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const blog = await ctx.db.blog.findFirst({ where: { id: input.id } });
@@ -118,5 +102,15 @@ export const blogRouter = createTRPCRouter({
           createdBy: { connect: { id: ctx.session.user.id } }
         }
       })
+    }),
+
+  // -----------------------------------------------------------------------------------------------
+
+
+  number_of_comments: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const comments = await ctx.db.comment.count({ where: { blogId: input.id } });
+      return comments
     }),
 });

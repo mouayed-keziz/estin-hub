@@ -1,16 +1,15 @@
 'use client'
 
-import BlogsSection from "@/components/blogs-section";
-import EventsTable from "@/components/events-table";
+import BlogsSection from "@/components/home/blogs-section";
+import EventsTable from "@/components/home/events-table";
 import Footer from "@/components/footer";
-import Hero from "@/components/hero";
+import Hero from "@/components/home/hero";
 import Navbar from "@/components/navbar";
 import { Container, Space } from "@mantine/core";
 
 export default function Page() {
   return (
     <>
-      <Navbar />
       <Space h={100} />
 
       <Container size='lg'>
@@ -25,7 +24,6 @@ export default function Page() {
         <BlogsSection title="Teachers Blogs" search_query="/search?teacher" />
       </Container>
       <Space h={100} />
-      <Footer />
 
 
     </>

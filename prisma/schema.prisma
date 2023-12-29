@@ -17,7 +17,7 @@ datasource db {
 model Blog {
     id          String     @id @default(cuid())
     title       String
-    image       String?
+    image       String
     content     String
     createdAt   DateTime   @default(now())
     updatedAt   DateTime   @updatedAt
@@ -25,7 +25,7 @@ model Blog {
     author      User       @relation(name: "BlogToUser", fields: [createdById], references: [id])
     createdById String
     comments    Comment[]  @relation(name: "BlogToComment")
-    tags        String?
+    tags        String     @default("[]")
 
     @@index([title])
 }
