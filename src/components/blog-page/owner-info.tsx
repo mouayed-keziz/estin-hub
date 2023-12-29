@@ -21,10 +21,10 @@ export default function OwnerInfo({ author }: { author: User | null }) {
                 {author.bio && <Text size='lg'><b>BIO  :</b>{author.bio}</Text>}
                 <Space h={30} />
                 <Stack>
-                    <Text size='md'><b>email  :</b> {author?.email}</Text>
-                    <Text size='md'><b>level  :</b> TODO</Text>
-                    {/*  eslint-disable-next-line @typescript-eslint/no-unsafe-call */}
+                    {author.email && <Text size='md'><b>email  :</b> {author.email}</Text>}
+                    {author.level && <Text size='md'><b>level  :</b> {author.level}</Text>}
                     <Text size='md'><b>joined :</b> TODO</Text>
+                    {/* {author.createdAt && <Text size='md'><b>joined :</b> {author.createdAt.toLocaleString()}</Text>} */}
                 </Stack>
             </Card>
         </>
