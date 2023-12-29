@@ -15,19 +15,19 @@ datasource db {
 }
 
 model Blog {
-    id          String       @id @default(cuid())
+    id          String        @id @default(cuid())
     title       String
     image       String
     content     String
-    createdAt   DateTime     @default(now())
-    updatedAt   DateTime     @updatedAt
-    status      BlogStatus   @default(DRAFT)
-    author      User         @relation(name: "BlogToUser", fields: [createdById], references: [id])
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    status      BlogStatus    @default(DRAFT)
+    author      User          @relation(name: "BlogToUser", fields: [createdById], references: [id])
     createdById String
-    comments    Comment[]    @relation(name: "BlogToComment")
-    tags        String       @default("[]")
-    blog_rating Blog_rating? @relation(name: "BlogToblog_rating")
-    rating      Int?         @default(0)
+    comments    Comment[]     @relation(name: "BlogToComment")
+    tags        String        @default("[]")
+    blog_rating Blog_rating[] @relation(name: "BlogToblog_rating")
+    rating      Int?          @default(0)
 
     @@index([title])
 }
@@ -124,7 +124,7 @@ model Blog_rating {
     userId String?
     user   User?   @relation(name: "blog_ratingToUser", fields: [userId], references: [id])
     blog   Blog?   @relation(name: "BlogToblog_rating", fields: [blogId], references: [id])
-    blogId String? @unique
+    blogId String?
     rating Int?    @default(0)
 }
 
