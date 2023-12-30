@@ -32,6 +32,7 @@ export const userRouter = createTRPCRouter({
                                 title: blog.title,
                                 image: blog.image,
                                 author: user.name,
+                                author_id: blog.createdById,
                                 role: user.role,
                             }
                         }),
@@ -42,6 +43,7 @@ export const userRouter = createTRPCRouter({
                                 image: blog.image,
                                 author: blog.author.name,
                                 role: blog.author.role,
+                                author_id: blog.createdById,
                             }
                         }),
                         num_blogs: user.blogs.length,
