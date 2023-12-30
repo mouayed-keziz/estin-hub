@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import Providers from "./_providers";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Script from 'next/script'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,6 +34,11 @@ export default function RootLayout({
         <TRPCReactProvider cookies={cookies().toString()}>
           <Providers>
             <Navbar />
+            <Script
+              async
+              src="https://umami-eta-peach.vercel.app/script.js"
+              data-website-id="d96d0306-5105-4d64-90c6-5b0ffd050c90"
+            />
             {children}
             <Footer />
           </Providers>
