@@ -6,7 +6,6 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { type Blog } from "@prisma/client";
-import { cp } from "fs";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
@@ -56,16 +55,6 @@ export const blogRouter = createTRPCRouter({
       else throw new Error("Failed to delete blog")
     }),
 
-  // -----------------------------------------------------------------------------------------------
-
-  publish_blog: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const blog = await ctx.db.blog.update({ where: { id: input.id, author: { id: ctx.session.user.id } }, data: { status: "PUBLISHED" } });
-
-      if (blog) return blog
-      else throw new Error("Failed to publish blog")
-    }),
 
   // -----------------------------------------------------------------------------------------------
 

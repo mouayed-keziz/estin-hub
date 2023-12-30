@@ -3,7 +3,8 @@
 import { api } from "@/trpc/react";
 import { ActionIcon, Flex, Popover, Rating, Stack, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconBookmark, IconBookmarkFilled, IconMessageCircle, IconStar } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { IconBookmark, IconBookmarkFilled, IconMessageCircle, IconStar, IconStarFilled } from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
@@ -31,6 +32,7 @@ export default function BlogActions({ blogId }: { blogId: string }) {
     const rate_blog_handeler = (value: number) => {
         setRating(value);
         void rate_blog.mutateAsync({ blogId: blogId, rating: value }).then(async () => {
+            notifications.show({ message: `blog rated successfully (${value})`, title: "Success" })
             await refetch();
         });
     }
@@ -38,22 +40,23 @@ export default function BlogActions({ blogId }: { blogId: string }) {
     const like_blog_handeler = () => {
         if (my_like.data) {
             void unlike_blog.mutateAsync({ blogId: blogId }).then(async () => {
+                notifications.show({ message: "blog unsaved successfully", title: "Success" })
                 await refetch();
                 await my_like.refetch();
+            }).catch(() => {
+                notifications.show({ message: "something went wrong", title: "Error", color: "red" })
             });
         } else {
             void like_blog.mutateAsync({ blogId: blogId }).then(async () => {
+                notifications.show({ message: "blog saved successfully", title: "Success" })
                 await refetch();
                 await my_like.refetch();
+            }).catch(() => {
+                notifications.show({ message: "something went wrong", title: "Error", color: "red" })
             });
         }
     }
 
-    const unlike_blog_handeler = () => {
-        void unlike_blog.mutateAsync({ blogId: blogId }).then(async () => {
-            await refetch();
-        });
-    }
 
     const isMobile = useMediaQuery('(max-width: 64em)');
     return (
@@ -69,7 +72,7 @@ export default function BlogActions({ blogId }: { blogId: string }) {
                     {session.status === "unauthenticated" && (
                         <Stack spacing={0}>
                             <ActionIcon disabled color="dark" size="xl" radius="xl">
-                                <IconStar size="2.125rem" />
+                                {my_rating.data ? (<IconStarFilled size="2.125rem" />) : (<IconStar size="2.125rem" />)}
                             </ActionIcon>
                             <Text align="center">{data?.avg_rating.toFixed(2)}</Text>
                         </Stack>
@@ -79,7 +82,7 @@ export default function BlogActions({ blogId }: { blogId: string }) {
                         <Popover.Target>
                             <Stack spacing={0}>
                                 <ActionIcon color="dark" size="xl" radius="xl">
-                                    <IconStar size="2.125rem" />
+                                    {my_rating.data ? (<IconStarFilled size="2.125rem" />) : (<IconStar size="2.125rem" />)}
                                 </ActionIcon>
                                 <Text align="center">
                                     {data?.avg_rating.toFixed(2)}

@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 model Blog {
@@ -17,7 +18,6 @@ model Blog {
     content     String
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
-    status      BlogStatus    @default(DRAFT)
     author      User          @relation(name: "BlogToUser", fields: [createdById], references: [id])
     createdById String
     comments    Comment[]     @relation(name: "BlogToComment")
@@ -27,6 +27,7 @@ model Blog {
     saved_by    User[]        @relation(name: "BlogToUser1")
 
     @@index([title])
+    @@index([createdById])
 }
 
 model Comment {
@@ -38,6 +39,9 @@ model Comment {
     createdBy   User     @relation(name: "CommentToUser", fields: [createdById], references: [id])
     createdById String
     blog        Blog     @relation(name: "BlogToComment", fields: [blogId], references: [id])
+
+    @@index([createdById])
+    @@index([blogId])
 }
 
 // Necessary for Next auth
@@ -81,6 +85,7 @@ model Account {
     user              User    @relation(name: "AccountToUser", fields: [userId], references: [id])
 
     @@unique([provider, providerAccountId])
+    @@index([userId])
 }
 
 model Session {
@@ -89,6 +94,8 @@ model Session {
     userId       String
     expires      DateTime
     user         User     @relation(name: "SessionToUser", fields: [userId], references: [id])
+
+    @@index([userId])
 }
 
 model Event {
@@ -98,6 +105,8 @@ model Event {
     userId String?
     club   User?    @relation(name: "EventToUser", fields: [userId], references: [id])
     link   String?
+
+    @@index([userId])
 }
 
 model Object {
@@ -115,6 +124,8 @@ model Object_announcement {
     owner    User?          @relation(name: "object_announcementToUser", fields: [userId], references: [id])
     object   Object         @relation(name: "objetToobject_announcement", fields: [objectId], references: [id])
     objectId String         @unique
+
+    @@index([userId])
 }
 
 model Blog_rating {
@@ -124,11 +135,9 @@ model Blog_rating {
     blog   Blog?   @relation(name: "BlogToblog_rating", fields: [blogId], references: [id])
     blogId String?
     rating Int?    @default(0)
-}
 
-enum BlogStatus {
-    DRAFT
-    PUBLISHED
+    @@index([userId])
+    @@index([blogId])
 }
 
 enum ROLE {

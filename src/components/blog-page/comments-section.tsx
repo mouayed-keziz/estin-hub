@@ -5,6 +5,12 @@ import { Avatar, Button, Card, Grid, Group, Space, Text, Textarea, Title } from 
 import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+import { notifications } from "@mantine/notifications";
+
+dayjs.extend(relativeTime)
 
 export default function CommentsSection({ blogId }: { blogId: string }) {
     const { data, refetch } = api.blog.get_blog_comments.useQuery({ id: blogId })
@@ -27,7 +33,11 @@ export default function CommentsSection({ blogId }: { blogId: string }) {
     });
 
     const submit_comment_handeler = () => {
-        create_comment.mutate({ comment: form.values.comment, blogId });
+        create_comment.mutateAsync({ comment: form.values.comment, blogId }).then(() => {
+            notifications.show({ message: "comment has been submitted", title: "Success" })
+        }).catch(() => {
+            notifications.show({ message: "something went wrong", title: "Error", color: "red" })
+        });
         form.reset();
     }
 
@@ -76,11 +86,11 @@ export default function CommentsSection({ blogId }: { blogId: string }) {
                         </Group>
                     </Grid.Col>
                     <Grid.Col span={11}>
-                        <Textarea
-                            size="md"
-                            disabled
-                            value={comment.content}
-                        />
+                        <Card withBorder shadow="sm" padding="sm" radius="md">
+                            <Text size="sm" color="dimmed"> <Text component={Link} href={`/user/${comment.createdBy.id}`} size="lg" color="blue">{comment.createdBy.name}</Text> • Posted on {comment.createdAt.toLocaleDateString()} ({dayjs(comment.createdAt).toNow()})</Text>
+                            <Space h={10} />
+                            <Text size="lg">{comment.content}</Text>
+                        </Card>
                     </Grid.Col>
                 </Grid>
             ))}

@@ -13,12 +13,13 @@ export default function BlogPage({ params }: { params: { id: string } }) {
     const { data, isLoading } = api.blog.get_blog_by_id.useQuery({ id: params.id });
     return (
         <>
-            <Space h={100} />
 
-            {isLoading && <Group position="center"><Loader size="xl" /></Group>}
-            {data?.message === "failed" && <Title order={1} align="center">BLOG Not Found</Title>}
+
+            {isLoading && <Group h="80vh" position="center"><Loader size="xl" /></Group>}
+            {data?.message === "failed" && <Group h="80vh" position="center"><Title order={1} align="center">BLOG Not Found</Title></Group>}
             {data?.message === "success" && (
                 <Container size='xl'>
+                    <Space h={100} />
                     <Grid>
                         <Grid.Col sx={theme => ({
                             [theme.fn.smallerThan('md')]: { display: "none" }

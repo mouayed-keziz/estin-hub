@@ -2,6 +2,7 @@
 import { MantineProvider, ColorSchemeProvider, type ColorScheme } from '@mantine/core';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { SessionProvider } from 'next-auth/react';
+import { Notifications } from '@mantine/notifications';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -19,6 +20,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             <SessionProvider>
                 <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                     <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+                        <Notifications />
                         {children}
                     </MantineProvider>
                 </ColorSchemeProvider>

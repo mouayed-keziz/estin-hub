@@ -4,6 +4,10 @@ import { Avatar, Card, Group, Space, Stack, Text } from "@mantine/core";
 import { type User } from "@prisma/client";
 import BadgeWithRole from "@/components/badge-with-role";
 import Link from "next/link";
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+
+dayjs.extend(relativeTime)
 
 export default function OwnerInfo({ author }: { author: User | null }) {
     if (!author) return (null)
@@ -23,7 +27,7 @@ export default function OwnerInfo({ author }: { author: User | null }) {
                 <Stack>
                     {author.email && <Text size='md'><b> email  :</b> {author.email}</Text>}
                     {author.level && <Text size='md'><b> level  :</b> {author.level}</Text>}
-                    <Text size='md'><b>joined :</b> {author.createdAt.toLocaleDateString()}</Text>
+                    <Text size='md'><b>joined :</b> {author.createdAt.toLocaleDateString()} ({dayjs(author.createdAt).toNow()})</Text>
                     {/* {author.createdAt && <Text size='md'><b>joined :</b> {author.createdAt.toLocaleString()}</Text>} */}
                 </Stack>
             </Card>

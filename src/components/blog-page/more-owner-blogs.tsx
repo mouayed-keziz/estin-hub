@@ -17,7 +17,7 @@ export default function MoreOwnerBlogs({ author, blogs }: { author: User | null,
 
                 {blogs?.map((blog, index) => (
                     <>
-                        <Text component={Link} href={`/blog/${blog.id}`} key={blog.id} sx={{ cursor: 'pointer' }} size='lg'>{blog.title}</Text>
+                        <Text component={Link} href={`/blog/${blog.id}`} key={blog.id} sx={{ cursor: 'pointer' }} size='lg'>• {blog.title}</Text>
                         {index !== blogs.length - 1 && <Divider my='sm' />}
                     </>
                 ))}
