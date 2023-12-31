@@ -6,6 +6,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { type Blog } from "@prisma/client";
+import { useEdgeStore } from "@/lib/edgestore";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
@@ -30,13 +31,15 @@ export const blogRouter = createTRPCRouter({
     .input(z.object({
       title: z.string(),
       image: z.string(),
+      tags: z.string(),
       content: z.string(),
     }))
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const new_blog = await ctx.db.blog.create({
         data: {
           title: input.title,
           image: input.image,
+          tags: input.tags,
           content: input.content,
           author: { connect: { id: ctx.session.user.id } }
         }
@@ -50,7 +53,6 @@ export const blogRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const blog = await ctx.db.blog.delete({ where: { id: input.id, author: { id: ctx.session.user.id } } });
-
       if (blog) return blog
       else throw new Error("Failed to delete blog")
     }),
@@ -130,13 +132,13 @@ export const blogRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const blog = await ctx.db.blog.findFirst({
-        where: { id: input.id }, select: { saved_by: true, comments: true, blog_rating: true }
+        where: { id: input.id }, select: { saved_by: true, comments: true, blog_rating: true, createdById: true }
       });
       if (blog) {
         const comments: number = blog.comments.length
         const saves: number = blog.saved_by.length;
         const rating_length: number = blog.blog_rating.length
-        if (rating_length === 0) return { comments, avg_rating: 0, saves }
+        if (rating_length === 0) return { comments, avg_rating: 0, saves, authorId: blog.createdById }
         else {
           let sum = 0;
           blog.blog_rating.forEach(rating => {
@@ -146,7 +148,7 @@ export const blogRouter = createTRPCRouter({
           });
 
           const avg_rating = sum / rating_length;
-          return { comments, avg_rating, saves }
+          return { comments, avg_rating, saves, authorId: blog.createdById }
         }
       }
     }),

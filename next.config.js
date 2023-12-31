@@ -7,7 +7,7 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
     images: {
-        domains: ["miro.medium.com", "images.unsplash.com"]
+        domains: ["miro.medium.com", "images.unsplash.com", "files.edgestore.dev"]
     }
 };
 

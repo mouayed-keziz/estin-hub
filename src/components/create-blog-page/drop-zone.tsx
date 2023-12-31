@@ -8,10 +8,12 @@ export default function DropZone(props: Partial<DropzoneProps>) {
     const theme = useMantineTheme();
     return (
         <Dropzone
+            disabled={props.disabled}
             onDrop={props.onDrop ?? (() => { console.log("") })}
             onReject={props.onReject}
             maxSize={props.maxSize}
             accept={props.accept}
+            loading={props.loading}
         >
             <Group position="center" spacing="xl" style={{ minHeight: rem(220), pointerEvents: 'none' }}>
                 <Dropzone.Accept>

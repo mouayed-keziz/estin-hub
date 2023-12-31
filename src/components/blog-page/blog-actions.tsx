@@ -4,17 +4,20 @@ import { api } from "@/trpc/react";
 import { ActionIcon, Flex, Popover, Rating, Stack, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconBookmark, IconBookmarkFilled, IconMessageCircle, IconStar, IconStarFilled } from "@tabler/icons-react";
+import { IconBookmark, IconBookmarkFilled, IconMessageCircle, IconStar, IconStarFilled, IconTrash } from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function BlogActions({ blogId }: { blogId: string }) {
+    const router = useRouter();
     const { data, refetch } = api.blog.get_blog_stats.useQuery({ id: blogId })
     const my_rating = api.blog.get_my_rating_for_blog.useQuery({ id: blogId })
     const my_like = api.blog.get_my_like_for_blog.useQuery({ id: blogId })
     const rate_blog = api.blog.rate_blog.useMutation();
     const like_blog = api.blog.like_blog.useMutation();
     const unlike_blog = api.blog.unlike_blog.useMutation();
+    const delete_blog = api.blog.delete_blog.useMutation();
     const session = useSession();
     const [rating, setRating] = useState(my_rating.data ?? 0);
 
@@ -57,6 +60,15 @@ export default function BlogActions({ blogId }: { blogId: string }) {
         }
     }
 
+
+    const delete_blog_handeler = () => {
+        delete_blog.mutateAsync({ id: blogId }).then(async () => {
+            notifications.show({ message: "blog deleted successfully", title: "Success" })
+            router.push("/")
+        }).catch(() => {
+            notifications.show({ message: "something went wrong", title: "Error", color: "red" })
+        })
+    }
 
     const isMobile = useMediaQuery('(max-width: 64em)');
     return (
@@ -114,6 +126,16 @@ export default function BlogActions({ blogId }: { blogId: string }) {
                     </ActionIcon>
                     <Text align="center">{data?.saves}</Text>
                 </Stack>
+
+
+                {session.data?.user.id === data?.authorId && (
+                    <Stack spacing={0}>
+                        <ActionIcon onClick={() => delete_blog_handeler()} color="dark" size="xl" radius="xl">
+                            <IconTrash color="red" size="2.125rem" />
+                        </ActionIcon>
+                    </Stack>
+                )}
+
             </Flex>
         </>
     )

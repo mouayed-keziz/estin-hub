@@ -1,6 +1,6 @@
 "use client"
 
-import { AspectRatio, Avatar, Box, Card, Divider, Group, Space, Stack, Text, Title } from "@mantine/core"
+import { AspectRatio, Avatar, Badge, Box, Card, Divider, Group, Space, Stack, Text, Title } from "@mantine/core"
 import Image from "next/image"
 import { type Blog, type User } from "@prisma/client"
 import Link from "next/link"
@@ -43,9 +43,14 @@ export default function BlogContent({ blog, author }: { blog: Blog | null, autho
                 <Box sx={theme => ({ [theme.fn.largerThan("md")]: { display: "none" } })}>
                     <BlogActions blogId={blog.id} />
                 </Box>
-                <Space h={20} />
                 <Group spacing='md' position="left">
+                    {blog.tags.split(" ").filter((tag) => tag !== "").map((tag, index) => (
+                        <Badge key={index} color="blue" variant="outline">
+                            {tag}
+                        </Badge>
+                    ))}
                 </Group>
+                <Space h={20} />
 
                 <Divider py={10} />
                 <Box dangerouslySetInnerHTML={{ __html: blog?.content ?? "" }} />
