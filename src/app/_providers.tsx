@@ -3,6 +3,8 @@ import { MantineProvider, ColorSchemeProvider, type ColorScheme } from '@mantine
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { SessionProvider } from 'next-auth/react';
 import { Notifications } from '@mantine/notifications';
+import { EdgeStoreProvider } from '@/lib/edgestore';
+
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -10,6 +12,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         defaultValue: 'light',
         getInitialValueInEffect: true,
     });
+
 
     const toggleColorScheme = (value?: ColorScheme) =>
         setColorScheme(value ?? (colorScheme === 'dark' ? 'light' : 'dark'));
@@ -21,7 +24,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                     <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
                         <Notifications />
-                        {children}
+                        <EdgeStoreProvider>
+                            {children}
+                        </EdgeStoreProvider>
                     </MantineProvider>
                 </ColorSchemeProvider>
             </SessionProvider>

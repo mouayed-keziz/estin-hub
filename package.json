@@ -13,6 +13,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@edgestore/react": "^0.1.6",
+    "@edgestore/server": "^0.1.6",
     "@emotion/react": "^11.11.3",
     "@mantine/core": "^6.0.13",
     "@mantine/dropzone": "^6.0.13",
