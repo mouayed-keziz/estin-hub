@@ -67,7 +67,7 @@ function UserDropDown() {
                 <Menu.Dropdown>
                     <Menu.Label>Application</Menu.Label>
                     <Menu.Item component={Link} href={`/user/${data?.user.id}`} icon={<IconUser size={14} />}>My profile</Menu.Item>
-                    <Menu.Item component={Link} href='/create' icon={<IconPlus size={14} />}>Create new blog</Menu.Item>
+                    <Menu.Item component={Link} href='/create-blog' icon={<IconPlus size={14} />}>Create new blog</Menu.Item>
                     <Menu.Item component={Link} href='/search' icon={<IconSearch size={14} />}>Search</Menu.Item>
 
                     <Menu.Divider />

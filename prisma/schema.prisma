@@ -13,9 +13,9 @@ datasource db {
 
 model Blog {
     id          String        @id @default(cuid())
-    title       String
+    title       String        @db.VarChar(256)
     image       String
-    content     String
+    content     String        @db.VarChar(10000)
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
     author      User          @relation(name: "BlogToUser", fields: [createdById], references: [id])
@@ -32,7 +32,7 @@ model Blog {
 
 model Comment {
     id          String   @id @default(cuid())
-    content     String
+    content     String   @db.VarChar(256)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
     blogId      String
@@ -60,7 +60,7 @@ model User {
     events        Event[]               @relation(name: "EventToUser")
     announcements Object_announcement[] @relation(name: "object_announcementToUser")
     ratings       Blog_rating[]         @relation(name: "blog_ratingToUser")
-    bio           String?
+    bio           String?               @db.VarChar(256)
     level         String?
     createdAt     DateTime              @default(now())
     updatedAt     DateTime              @updatedAt
