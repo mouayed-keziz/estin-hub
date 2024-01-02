@@ -7,6 +7,7 @@ import {
 } from "@/server/api/trpc";
 import { type Blog } from "@prisma/client";
 import { useEdgeStore } from "@/lib/edgestore";
+import { backendClient } from "@/app/api/edgestore/[...edgestore]/route";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
@@ -52,8 +53,22 @@ export const blogRouter = createTRPCRouter({
   delete_blog: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const blog = await ctx.db.blog.delete({ where: { id: input.id, author: { id: ctx.session.user.id } } });
-      if (blog) return blog
+
+      // const blog = await ctx.db.blog.delete({
+      //   where: {
+      //     id: input.id,
+      //     author: { id: ctx.session.user.id }
+      //   },
+      // });
+      //delete blog with id = input.id, with all its comments and saves and ratings
+      const blog = await ctx.db.blog.findFirst({ where: { id: input.id } });
+      if (blog) {
+        await ctx.db.comment.deleteMany({ where: { blogId: input.id } });
+        await ctx.db.blog_rating.deleteMany({ where: { blogId: input.id } });
+        await ctx.db.blog.delete({ where: { id: input.id } });
+        await backendClient.publicFiles.deleteFile({ url: blog.image })
+        return blog
+      }
       else throw new Error("Failed to delete blog")
     }),
 
@@ -205,5 +220,25 @@ export const blogRouter = createTRPCRouter({
       });
       const avg = sum / ratings.length;
       await ctx.db.blog.update({ where: { id: input.blogId }, data: { rating: avg } });
+    }),
+
+
+  // -----------------------------------------------------------------------------------------------
+
+
+  search_blogs: publicProcedure
+    .input(z.object({ query: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const blogs = await ctx.db.blog.findMany({
+        where: {
+          title: {
+            contains: input.query,
+          }
+        },
+        include: {
+          author: true
+        }
+      })
+      return blogs;
     })
 });

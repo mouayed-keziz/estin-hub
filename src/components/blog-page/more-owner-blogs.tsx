@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, Divider, Space, Text } from "@mantine/core"
+import { Box, Card, Divider, Space, Text } from "@mantine/core"
 import { type Blog, type User } from "@prisma/client"
 import Link from "next/link"
 
@@ -17,8 +17,10 @@ export default function MoreOwnerBlogs({ author, blogs }: { author: User | null,
 
                 {blogs?.map((blog, index) => (
                     <>
-                        <Text component={Link} href={`/blog/${blog.id}`} key={blog.id} sx={{ cursor: 'pointer' }} size='lg'>• {blog.title}</Text>
-                        {index !== blogs.length - 1 && <Divider my='sm' />}
+                        <Box key={index}>
+                            <Text component={Link} href={`/blog/${blog.id}`} sx={{ cursor: 'pointer' }} size='lg'>• {blog.title}</Text>
+                            {index !== blogs.length - 1 && <Divider my='sm' />}
+                        </Box>
                     </>
                 ))}
             </Card>

@@ -6,10 +6,11 @@ import { IconSearch, IconTrash, IconUser, IconHeart, IconPlus, IconLogout, IconM
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
     const { status } = useSession();
-
     return (
         <>
             <Container size='lg' py='xs'>
@@ -17,11 +18,6 @@ export default function Navbar() {
 
                     <Text component={Link} href="/" fz="1.5rem" fw={'bold'}>ESTIN-HUB</Text>
 
-                    <Autocomplete sx={theme => ({
-                        [theme.fn.smallerThan('md')]: {
-                            display: 'none'
-                        }
-                    })} placeholder='Search for blogs' icon={<IconSearch />} data={['1', '2', '3', '4']} />
                     {status === 'loading' && <Loading />}
                     {status === 'authenticated' && <UserDropDown />}
                     {status === 'unauthenticated' && <LoginButton />}

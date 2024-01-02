@@ -37,8 +37,8 @@ export default function BlogCard({ id, title, author, image, owner_role, author_
                 <Box>
                     <Group position="apart" mt="md" align='center'>
                         <Group spacing="xs" position="left" align='center'>
-                            <Avatar color='blue' radius={"xl"} >{author.charAt(0)}</Avatar>
-                            <Text size="sm" color="dimmed">
+                            <Avatar component={Link} href={`/user/${author_id}`} color='blue' radius={"xl"} >{author.charAt(0)}</Avatar>
+                            <Text component={Link} href={`/user/${author_id}`} size="sm" color="dimmed">
                                 {author}
                             </Text>
                         </Group>

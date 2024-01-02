@@ -59,10 +59,10 @@ export default function BlogsSection({ title, search_query }: BlogCardProps) {
                 </Button>
             </Group>
 
-            <Grid justify="center" grow>
+            <Grid justify="center" >
                 {blogs.map((blog) => (
-                    <Grid.Col key={blog.title} span={12} md={6} lg={4}>
-                        <BlogCard title={blog.title} author={blog.author} image={blog.image} owner_role={blog.owner_role} author_id={blog.author_id} id={""} />
+                    <Grid.Col key={blog.title} span={12} xs={6} sm={6} md={4} lg={4}>
+                        <BlogCard title={blog.title} author={blog.author} image={blog.image} owner_role={blog.owner_role} author_id={blog.author_id} id={blog.id} />
                     </Grid.Col>
                 ))}
             </Grid>

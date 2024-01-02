@@ -75,17 +75,15 @@ function AuthenticatedState() {
     })
 
     const upload_picture_handeler = async (files: FileWithPath[]) => {
-        form.setFieldValue("image", files.at(0) ?? null)
-        if (form.values.image) {
-            const imageUrl = URL.createObjectURL(form.values.image);
-            setImage(imageUrl);
-        } else {
-            notifications.show({ message: "Please try again", color: "red" })
-        }
+        if (files.length === 0) return;
+        form.setFieldValue("image", files[0] as File);
+        const imageUrl = URL.createObjectURL(files[0] as File);
+        setImage(imageUrl);
     }
 
     const submitBlogHandeler = () => {
         form.validate();
+        console.log("valid")
         if (form.isValid() && form.values.image) {
             const { title, content, image, tags } = form.values;
             setUploading(true);

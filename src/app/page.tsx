@@ -14,8 +14,8 @@ export default function Page() {
 
       <Container size='lg'>
         <Hero />
-        <Space h={100} />
-        <EventsTable />
+        {/* <Space h={100} />
+        <EventsTable /> */}
         <Space h={100} />
         <BlogsSection title="Recent Blogs" search_query="/search?recent" />
         <Space h={100} />

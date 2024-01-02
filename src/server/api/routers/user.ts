@@ -4,6 +4,7 @@ import {
     protectedProcedure,
     publicProcedure,
 } from "@/server/api/trpc";
+import { ROLE } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod"
 
@@ -85,5 +86,21 @@ export const userRouter = createTRPCRouter({
             } else {
                 return ({ message: "failed", user: null });
             }
+        }),
+
+    change_user_role: protectedProcedure
+        .input(z.object({ role: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            let role: ROLE = "STUDENT";
+            if (input.role === "STUDENT") role = "STUDENT";
+            else if (input.role === "TEACHER") role = "TEACHER"
+            else if (input.role === "CLUB") role = "CLUB"
+            else throw new TRPCError({ code: "BAD_REQUEST", message: "Role not found" })
+
+            const user = await ctx.db.user.update({
+                where: { id: ctx.session.user.id },
+                data: { role: role },
+            })
+            return user
         })
 });
