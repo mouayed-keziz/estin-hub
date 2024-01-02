@@ -6,8 +6,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { type Blog } from "@prisma/client";
-import { useEdgeStore } from "@/lib/edgestore";
-import { backendClient } from "@/app/api/edgestore/[...edgestore]/route";
+import { backendClient } from "@/lib/edgestore-server";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
