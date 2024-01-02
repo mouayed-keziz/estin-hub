@@ -11,7 +11,6 @@ import BlogCard from "@/components/home/blog-card";
 
 export default function SearchPage() {
     const [search, setSearch] = useState("");
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [params] = useSearchParams();
     const [debouncedUrl] = useDebouncedValue(search, 200);
@@ -44,7 +43,6 @@ export default function SearchPage() {
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     if (search === '') return;
-                    setLoading(true);
                     void router.push(`/search?text=${search}`)
                 }}>
                     <TextInput value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Search for blogs' size='lg' icon={<IconSearch />} />
