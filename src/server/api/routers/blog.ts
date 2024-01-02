@@ -243,5 +243,93 @@ export const blogRouter = createTRPCRouter({
         }
       })
       return blogs;
+    }),
+
+  // -----------------------------------------------------------------------------------------------
+
+  home_page_blogs: publicProcedure
+    .query(async ({ ctx }) => {
+      const result = await ctx.db.$transaction([
+        ctx.db.blog.findMany({ where: { author: { role: { equals: "STUDENT" } } }, take: 3, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true, role: true } } } }),
+        ctx.db.blog.findMany({ where: { author: { role: { equals: "TEACHER" } } }, take: 3, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true, role: true } } } }),
+        ctx.db.blog.findMany({ where: { author: { role: { equals: "CLUB" } } }, take: 3, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true, role: true } } } }),
+        ctx.db.blog.findMany({ take: 3, orderBy: { createdAt: "desc" }, include: { author: { select: { name: true, role: true } } } })
+      ]);
+
+      const student_blogs = result[0].map(blog => (
+        {
+          author: {
+            name: blog.author.name,
+            role: blog.author.role
+          },
+          id: blog.id,
+          title: blog.title,
+          image: blog.image,
+          content: blog.content,
+          createdAt: blog.createdAt,
+          updatedAt: blog.updatedAt,
+          createdById: blog.createdById,
+          tags: blog.tags,
+          rating: blog.rating,
+        }
+      ))
+      const teacher_blogs = result[1].map(blog => (
+        {
+          author: {
+            name: blog.author.name,
+            role: blog.author.role
+          },
+          id: blog.id,
+          title: blog.title,
+          image: blog.image,
+          content: blog.content,
+          createdAt: blog.createdAt,
+          updatedAt: blog.updatedAt,
+          createdById: blog.createdById,
+          tags: blog.tags,
+          rating: blog.rating,
+        }
+      ))
+      const club_blogs = result[2].map(blog => (
+        {
+          author: {
+            name: blog.author.name,
+            role: blog.author.role
+          },
+          id: blog.id,
+          title: blog.title,
+          image: blog.image,
+          content: blog.content,
+          createdAt: blog.createdAt,
+          updatedAt: blog.updatedAt,
+          createdById: blog.createdById,
+          tags: blog.tags,
+          rating: blog.rating,
+        }
+      ))
+      const recent_blogs = result[3].map(blog => (
+        {
+          author: {
+            name: blog.author.name,
+            role: blog.author.role
+          },
+          id: blog.id,
+          title: blog.title,
+          image: blog.image,
+          content: blog.content,
+          createdAt: blog.createdAt,
+          updatedAt: blog.updatedAt,
+          createdById: blog.createdById,
+          tags: blog.tags,
+          rating: blog.rating,
+        }
+      ))
+
+      return {
+        student_blogs,
+        teacher_blogs,
+        club_blogs,
+        recent_blogs
+      }
     })
 });
