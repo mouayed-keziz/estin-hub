@@ -7,6 +7,7 @@ import {
 } from "@/server/api/trpc";
 import { type Blog } from "@prisma/client";
 import { backendClient } from "@/lib/edgestore-server";
+import { title } from "process";
 
 export const blogRouter = createTRPCRouter({
   get_all_blogs: publicProcedure
@@ -230,9 +231,12 @@ export const blogRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const blogs = await ctx.db.blog.findMany({
         where: {
-          title: {
-            contains: input.query,
-          }
+          OR: [
+            { title: { contains: input.query } },
+            { tags: { contains: input.query } },
+            { content: { contains: input.query } },
+            { author: { name: { contains: input.query } } },
+          ]
         },
         include: {
           author: true
