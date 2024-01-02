@@ -25,11 +25,12 @@ export default function Hero() {
                 router.push(`/search?text=${search}`)
             }}>
                 <Grid mt='xl' >
-                    <Grid.Col span={10}>
+                    <Grid.Col span={9} xs={10}>
                         <TextInput value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Search for blogs' size='lg' icon={<IconSearch />} />
                     </Grid.Col>
-                    <Grid.Col span={2}>
-                        <Button loading={loading} type="submit" variant="outline" size='lg'>Search</Button>
+                    <Grid.Col span={3} xs={2}>
+                        <Button fullWidth sx={theme => ({ [theme.fn.smallerThan("sm")]: { display: "none" } })} loading={loading} type="submit" variant="outline" size='lg'>Search</Button>
+                        <Button fullWidth sx={theme => ({ [theme.fn.largerThan("sm")]: { display: "none" } })} loading={loading} type="submit" variant="outline" size='lg'><IconSearch /></Button>
                     </Grid.Col>
                 </Grid>
             </form>
