@@ -14,9 +14,9 @@ export default function BlogsSection({ title, search_query, blogs }: BlogCardPro
                 <Title mb='md' order={1}>
                     {title} :
                 </Title>
-                <Button radius="md" component={Link} href={search_query} leftIcon={<IconDots />} variant="light">
+                {/* <Button radius="md" component={Link} href={search_query} leftIcon={<IconDots />} variant="light">
                     View all
-                </Button>
+                </Button> */}
             </Group>
 
             <Grid>
