@@ -51,7 +51,7 @@ export default function CommentsSection({ blogId }: { blogId: string }) {
                 <Grid mb={40}>
                     <Grid.Col span={1} >
                         <Group position="right" align="center">
-                            <Avatar src={session.data?.user.image} radius='100%' size={isMobile ? "lg" : "xl"} color="primary">{session.data?.user.name?.charAt(0)}</Avatar>
+                            <Avatar src={session.data?.user.image} radius='100%' size={isMobile ? "sm" : "md"} color="primary">{session.data?.user.name?.charAt(0)}</Avatar>
                         </Group>
                     </Grid.Col>
                     <Grid.Col span={11}>
@@ -82,7 +82,7 @@ export default function CommentsSection({ blogId }: { blogId: string }) {
                 <Grid key={index} mb={20}>
                     <Grid.Col span={1} >
                         <Group position="right" align="center">
-                            <Avatar src={comment.createdBy.image} radius='xl' size={isMobile ? "md" : "lg"} color="primary">{comment.createdBy.name?.charAt(0)}</Avatar>
+                            <Avatar src={comment.createdBy.image} radius='xl' size={isMobile ? "xs" : "sm"} color="primary">{comment.createdBy.name?.charAt(0)}</Avatar>
                         </Group>
                     </Grid.Col>
                     <Grid.Col span={11}>
