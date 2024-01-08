@@ -2,10 +2,10 @@
 
 import BadgeWithRole from "@/components/badge-with-role";
 import { api } from "@/trpc/react";
-import { Avatar, Button, Card, Container, Divider, Grid, Group, Loader, NativeSelect, Select, Space, Stack, TextInput, Title } from "@mantine/core";
+import { Avatar, Button, Card, Container, Grid, Group, Loader, NativeSelect, Space, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { ROLE } from "@prisma/client";
+import { type ROLE } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
