@@ -34,6 +34,7 @@ export const userRouter = createTRPCRouter({
                                 image: blog.image,
                                 author: user.name,
                                 author_id: blog.createdById,
+                                author_img: user.image,
                                 role: user.role,
                             }
                         }),
@@ -43,6 +44,7 @@ export const userRouter = createTRPCRouter({
                                 title: blog.title,
                                 image: blog.image,
                                 author: blog.author.name,
+                                author_img: user.image,
                                 role: blog.author.role,
                                 author_id: blog.createdById,
                             }

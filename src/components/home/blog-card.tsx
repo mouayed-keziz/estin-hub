@@ -10,12 +10,13 @@ interface BlogCardProps {
     id: string,
     title: string;
     author: string;
+    author_img: string | null;
     image: string;
     author_id: string;
     owner_role: "STUDENT" | "TEACHER" | "CLUB";
 }
 
-export default function BlogCard({ id, title, author, image, owner_role, author_id }: BlogCardProps) {
+export default function BlogCard({ id, title, author, image, owner_role, author_id, author_img }: BlogCardProps) {
     return (
         <Card sx={{ height: '100%' }} shadow="sm" padding="lg" radius="md" withBorder>
 
@@ -37,7 +38,7 @@ export default function BlogCard({ id, title, author, image, owner_role, author_
                 <Box>
                     <Group position="apart" mt="md" align='center'>
                         <Group spacing="xs" position="left" align='center'>
-                            <Avatar component={Link} href={`/user/${author_id}`} color='blue' radius={"xl"} >{author.charAt(0)}</Avatar>
+                            <Avatar src={author_img ?? ""} component={Link} href={`/user/${author_id}`} color='blue' radius={"xl"} >{author.charAt(0)}</Avatar>
                             <Text component={Link} href={`/user/${author_id}`} size="sm" color="dimmed">
                                 {author}
                             </Text>

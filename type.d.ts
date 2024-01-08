@@ -8,6 +8,7 @@ interface BlogCardProps {
         author: {
             name: string | null;
             role: $Enums.ROLE;
+            image: string | null;
         };
         id: string;
         title: string;
