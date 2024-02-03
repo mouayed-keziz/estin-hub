@@ -27,9 +27,9 @@ export const authOptions: NextAuthOptions = {
       ...session,
       user: user
     }),
-    // signIn: ({ user }) => {
-    //   return Boolean(user.email?.endsWith("@estin.dz"))
-    // }
+    signIn: ({ user }) => {
+      return Boolean(user.email?.endsWith("@estin.dz"))
+    }
   },
   adapter: PrismaAdapter(db),
   providers: [
